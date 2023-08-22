@@ -1,0 +1,4 @@
+org.example.api.service.HelloService=\
+org.example.api.service.impl.HelloServiceImpl1,\
+org.example.api.service.impl.HelloServiceImpl2
+org.springframework.context.ApplicationContextInitializer=org.example.api.init.MyApplicationContextInitializer
