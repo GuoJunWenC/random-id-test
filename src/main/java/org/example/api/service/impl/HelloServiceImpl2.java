@@ -1,0 +1,10 @@
+package org.example.api.service.impl;
+
+import org.example.api.service.HelloService;
+
+public class HelloServiceImpl2 implements HelloService {
+    @Override
+    public void sayHello() {
+        System.out.println("Hello World from HelloServiceImpl2!");
+    }
+}

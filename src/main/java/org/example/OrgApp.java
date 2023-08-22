@@ -1,0 +1,21 @@
+package org.example;
+
+import org.example.api.init.MySpringApplication;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+@EnableAsync
+@EnableAspectJAutoProxy
+@SpringBootApplication
+public class OrgApp {
+    public static void main(String[] args) {
+        SpringApplication.run(OrgApp.class,args);
+     /*   SpringApplication application = new SpringApplication(OrgApp.class);
+        application.addInitializers(new MyApplicationContextInitializer());
+        application.run(args);*/
+/*        MySpringApplication application = new MySpringApplication(OrgApp.class);
+        application.run(args);*/
+    }
+}
