@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/appLog")
 public class AppLogTestController {
 
-    @PostMapping("/test")
+    @PostMapping("/test1")
     public B test(@RequestParam("name") String name, @RequestBody A a) {
         return new B(name, a.age);
     }
