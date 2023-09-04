@@ -1,7 +1,5 @@
 package org.example.api.enums;
 
-import org.example.api.log.AppLogTestController;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
