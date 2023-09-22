@@ -1,0 +1,90 @@
+jw:
+  random-id: 1
+server:
+  port: 3456
+org:
+  example:
+    limit:
+      type: slidingWindow
+#org.example.limit.type=guava
+#org.example.limit.type=redis
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  redis:
+    port: 6379
+# Elasticsearch配置
+  elasticsearch:
+    rest:
+      uris: http://127.0.0.1:9200
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+  datasource:
+    url: jdbc:mysql://8.142.153.195:3306/test
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  shardingsphere:
+    # 数据源配置
+    datasource:
+      # 数据源名称，多数据源以逗号分隔
+      names: db0,db1
+      db0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://8.142.153.195:3306/db0?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        username: root
+        password: root
+      db1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbc-url: jdbc:mysql://8.142.153.195:3306/db1?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+        username: root
+        password: root
+    # 分片规则配置
+    rules:
+      sharding:
+        # 分片算法配置
+        sharding-algorithms:
+          database-inline:
+            # 分片算法类型
+            type: INLINE
+            props:
+              # 分片算法的行表达式（算法自行定义，此处为方便演示效果）
+              algorithm-expression: db$->{order_id % 2}
+          table-inline:
+            # 分片算法类型
+            type: INLINE
+            props:
+              # 分片算法的行表达式
+              algorithm-expression: t_order_$->{order_id % 3}
+        tables:
+          # 逻辑表名称
+          t_order:
+            # 行表达式标识符可以使用 ${...} 或 $->{...}，但前者与 Spring 本身的属性文件占位符冲突，因此在 Spring 环境中使用行表达式标识符建议使用 $->{...}
+            actual-data-nodes: db${0..1}.t_order_${0..2}
+            # 分库策略
+            database-strategy:
+              standard:
+                # 分片列名称
+                sharding-column: order_id
+                # 分片算法名称
+                sharding-algorithm-name: database-inline
+            # 分表策略
+            table-strategy:
+              standard:
+                # 分片列名称
+                sharding-column: order_id
+                # 分片算法名称
+                sharding-algorithm-name: table-inline
+    # 属性配置
+    props:
+      # 展示修改以后的sql语句
+      sql-show: true
+logging:
+  level:
+    com:
+      es=debug:
