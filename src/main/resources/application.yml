@@ -14,12 +14,22 @@ spring:
     allow-bean-definition-overriding: true
   redis:
     port: 6379
+    host: 8.142.153.195
+    jedis:
+      pool:
+        max-active: 30
+        max-wait: 1000ms
+        max-idle: 8
+
 # Elasticsearch配置
   elasticsearch:
     rest:
       uris: http://127.0.0.1:9200
   data:
     elasticsearch:
+      repositories:
+        enabled: true
+    redis:
       repositories:
         enabled: true
   datasource:
