@@ -1,7 +1,7 @@
 package org.example.api.joinrequest;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import org.apache.commons.collections4.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
