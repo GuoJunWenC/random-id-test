@@ -6,14 +6,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/productInfo")
 public class ProductInfoController {
     @Autowired
     private ProductInfoService productInfoService;
+    @Autowired
+    private RestTemplate restTemplate;
 
     /**
      * 查询数据
@@ -24,5 +30,26 @@ public class ProductInfoController {
     @GetMapping("/queryProductInfo")
     public List<ProductInfo> queryProductInfo(String searchPram) {
         return productInfoService.queryProductInfo(searchPram);
+    }
+    /**
+     * 查询数据
+     */
+    @GetMapping("/requestProductInfo")
+    public void requestProductInfo() {
+        ExecutorService executorService = Executors.newFixedThreadPool(20);//模拟20个并发请求
+        CountDownLatch countDownLatch = new CountDownLatch(20);
+        for (int i = 1; i <= 20; i++) {
+            int finalI = i;
+            executorService.execute(() -> {
+                try {
+                    countDownLatch.await();
+                    ProductInfo forObject = restTemplate.getForObject("http://127.0.0.1:3456/request/requestMergeHystrix/getProductInfoById?id=" + finalI, ProductInfo.class);
+                    System.out.println("finalI" + finalI + forObject);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            });
+            countDownLatch.countDown();
+        }
     }
 }

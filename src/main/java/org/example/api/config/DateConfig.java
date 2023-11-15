@@ -3,6 +3,7 @@ package org.example.api.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,10 @@ public class DateConfig {
 			}
 		};
 	}
+	@Bean
+	public RestTemplate restTemplate(){
+		return new RestTemplate();
+	};
 
 	@Bean
 	public Converter<String, LocalDateTime> localDateTimeConverter() {

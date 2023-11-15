@@ -2,6 +2,7 @@ package org.example.api.els.sync.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -21,25 +22,28 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
+@Slf4j
 @Service
 public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, ProductInfo> implements ProductInfoService {
     @Autowired
     private ProductInfoElasticsearchRepository productInfoElasticsearchRepository;
     @Autowired
     private RestHighLevelClient restHighLevelClient;
-  /*  @Override
-    public List<ProductInfo> queryProductInfo(String searchPram) {
-        QueryBuilder queryBuilder  = QueryBuilders.fuzzyQuery("productName", searchPram).fuzziness(Fuzziness.AUTO);
-        Iterable<ProductInfoVO> search = productInfoElasticsearchRepository.search(queryBuilder);
-        List<ProductInfoVO> users = new ArrayList<>();
-        for (ProductInfoVO productInfoVO : search) {
-            users.add(productInfoVO);
-        }
-        Optional<ProductInfoVO> byId = productInfoElasticsearchRepository.findById(1L);
 
-        return baseMapper.queryProductInfo();
-    }*/
+    /*  @Override
+      public List<ProductInfo> queryProductInfo(String searchPram) {
+          QueryBuilder queryBuilder  = QueryBuilders.fuzzyQuery("productName", searchPram).fuzziness(Fuzziness.AUTO);
+          Iterable<ProductInfoVO> search = productInfoElasticsearchRepository.search(queryBuilder);
+          List<ProductInfoVO> users = new ArrayList<>();
+          for (ProductInfoVO productInfoVO : search) {
+              users.add(productInfoVO);
+          }
+          Optional<ProductInfoVO> byId = productInfoElasticsearchRepository.findById(1L);
+
+          return baseMapper.queryProductInfo();
+      }*/
     @SneakyThrows
     @Override
     public List<ProductInfo> queryProductInfo(String searchPram) {
@@ -47,7 +51,7 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         MultiMatchQueryBuilder multiMatchQueryBuilder = QueryBuilders.multiMatchQuery(searchPram,
                 "productName",
-               "productCode").analyzer("ik_smart").fuzziness(Fuzziness.ONE);
+                "productCode").analyzer("ik_smart").fuzziness(Fuzziness.ONE);
         FuzzyQueryBuilder fuzzyQuery = QueryBuilders.fuzzyQuery("productName", searchPram).fuzziness(Fuzziness.TWO);
 
         searchSourceBuilder.query(multiMatchQueryBuilder);
@@ -69,4 +73,6 @@ public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, Produ
         System.out.println(ids);
         return null;
     }
+
+
 }

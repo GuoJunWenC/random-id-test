@@ -13,4 +13,6 @@ public interface ProductInfoService extends IService<ProductInfo> {
      * @return List<ProductInfo>
      */
     List<ProductInfo> queryProductInfo(String searchPram);
+
+
 }
