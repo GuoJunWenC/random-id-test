@@ -72,8 +72,7 @@ public class CaffeineCacheTest {
         graphs.thenAccept(System.out::println);
     }
 
-    private static String getValueFromDB(String key) {
-        return "DATA";
+
     }*/
     // Evict based on the number of entries in the cache
    /*public static void main(String[] args) throws InterruptedException {

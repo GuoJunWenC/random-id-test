@@ -1,5 +1,7 @@
 package org.example.api.els.sync.controller;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import org.example.api.els.sync.entity.ProductInfo;
 import org.example.api.els.sync.service.ProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +12,9 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.lang.ref.WeakReference;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 @CacheConfig(cacheNames = "caffeineCacheManager")
 @RestController
@@ -33,7 +34,30 @@ public class ProductInfoController {
     public List<ProductInfo> queryProductInfo(String searchPram) {
         return productInfoService.queryProductInfo(searchPram);
     }
+    public static void main(String[] args) {
+        Cache<String, WeakReference<String>> cache = CacheBuilder.newBuilder()
+                .maximumSize(100) // 最大缓存大小
+                .expireAfterWrite(10, TimeUnit.MICROSECONDS) // 缓存过期时间
+                .build();
 
+        String key = "testKey";
+        String value = "testValue";
+        cache.put(key, new WeakReference<>(value));
+
+        WeakReference<String> weakValue = cache.getIfPresent(key);
+        if (weakValue != null) {
+            String actualValue = weakValue.get();
+            if (actualValue != null) {
+                System.out.println("缓存中存在键为 " + key + " 的值：" + actualValue);
+            } else {
+                System.out.println("缓存中键为 " + key + " 的值已被回收");
+            }
+        } else {
+            System.out.println("缓存中不存在键为 " + key + " 的值");
+        }
+
+        cache.invalidate(key); // 从缓存中移除键为 key 的项
+    }
     /**
      * 通过id查询商品
      *
