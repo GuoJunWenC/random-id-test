@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ElasticSearchClientConfig {
-    @Bean
+  /*  @Bean
     public RestHighLevelClient restHighLevelClient() {
         return new RestHighLevelClient(
                 RestClient.builder(
                         new HttpHost("127.0.0.1", 9200, "http")));
-    }
+    }*/
 }

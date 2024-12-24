@@ -85,7 +85,7 @@ public class ProductInfoController {
 
     @GetMapping("/requestProductInfo")
     public void requestProductInfo() {
-        ExecutorService executorService = Executors.newFixedThreadPool(20);//模拟20个并发请求
+     /*   ExecutorService executorService = Executors.newFixedThreadPool(20);//模拟20个并发请求
         CountDownLatch countDownLatch = new CountDownLatch(20);
         for (int i = 1; i <= 20; i++) {
             int finalI = i;
@@ -99,7 +99,7 @@ public class ProductInfoController {
                 }
             });
             countDownLatch.countDown();
-        }
+        }*/
     }
 
     /**

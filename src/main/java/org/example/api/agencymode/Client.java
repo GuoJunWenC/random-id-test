@@ -11,7 +11,7 @@ public class Client {
          Subject subject = new ProxySubject();
          subject.request();
      }*/
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         RealSubject realSubject = new RealSubject();
         InvocationHandler handler = new ProxyHandler(realSubject);
         //测试
@@ -21,5 +21,10 @@ public class Client {
                 handler
         );
         subject.request();
+    }*/
+
+    public static void main(String[] args) {
+        RealSubject proxySubject = CglibProxy.createProxy();
+        proxySubject.request();
     }
 }

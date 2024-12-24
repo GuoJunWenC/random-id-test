@@ -27,7 +27,7 @@ public class AesCipher {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(encrypt("a123", Base64.getEncoder().encodeToString("1234567896".getBytes())));
+        System.out.println(encrypt("Lzz@2023.","ravenraveenraven"));
     }
     /**
      * 解密方法
