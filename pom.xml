@@ -28,7 +28,17 @@
             <artifactId>javassist</artifactId>
             <version>3.25.0-GA</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>1.5.2.Final</version> <!-- 请根据需要选择版本 -->
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>1.5.2.Final</version> <!-- 请根据需要选择版本 -->
+            <scope>provided</scope>
+        </dependency>
         <!-- Hystrix -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
