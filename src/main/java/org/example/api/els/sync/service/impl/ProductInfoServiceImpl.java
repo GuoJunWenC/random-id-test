@@ -27,7 +27,7 @@ import java.util.concurrent.Future;
 @Slf4j
 @Service
 public class ProductInfoServiceImpl extends ServiceImpl<ProductInfoMapper, ProductInfo> implements ProductInfoService {
-    @Autowired
+/*    @Autowired*/
     private ProductInfoElasticsearchRepository productInfoElasticsearchRepository;
     @Autowired
     private RestHighLevelClient restHighLevelClient;

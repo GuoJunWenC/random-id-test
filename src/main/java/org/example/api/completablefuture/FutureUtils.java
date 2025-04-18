@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BinaryOperator;
 import java.util.function.Predicate;
@@ -97,7 +98,7 @@ public class FutureUtils {
         return CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture<?>[0]))
                 .thenApply(v -> completableFutures.stream()
                         .map(CompletableFuture::join)
-                        .filter(e -> e != null)
+                        .filter(Objects::nonNull)
                         .collect(Collectors.toList())
                 );
     }
@@ -108,7 +109,7 @@ public class FutureUtils {
     public static <T> CompletableFuture<List<T>> sequenceListNonNull(Collection<CompletableFuture<List<T>>> completableFutures) {
         return CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture<?>[0]))
                 .thenApply(v -> completableFutures.stream()
-                        .flatMap( listFuture -> listFuture.join().stream().filter(e -> e != null))
+                        .flatMap( listFuture -> listFuture.join().stream().filter(Objects::nonNull))
                         .collect(Collectors.toList())
                 );
     }

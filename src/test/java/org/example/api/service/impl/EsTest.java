@@ -52,7 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class EsTest {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
-    @Autowired
+/*    @Autowired*/
     private ProductInfoElasticsearchRepository productInfoElasticsearchRepository;
     @Autowired
     private ProductInfoMapper productInfoMapper;
@@ -259,7 +259,9 @@ public class EsTest {
         SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
 
         //获取总条数
-        System.out.println(searchResponse.getHits().getTotalHits().value);
+/*
+        System.out.println(searchResponse.getHits().getTotalHits());
+*/
         //输出结果数据（如果不设置返回条数，大于10条默认只返回10条）
         SearchHit[] hits = searchResponse.getHits().getHits();
         for (SearchHit hit : hits) {

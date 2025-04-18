@@ -6,7 +6,9 @@ import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+/*
 @EnableHystrix
+*/
 @EnableScheduling
 @EnableAsync
 @EnableAspectJAutoProxy

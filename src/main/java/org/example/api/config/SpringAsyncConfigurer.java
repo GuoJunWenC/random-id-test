@@ -8,8 +8,10 @@ import org.springframework.scheduling.annotation.AsyncConfigurerSupport;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.Arrays;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -40,6 +42,7 @@ public class SpringAsyncConfigurer extends AsyncConfigurerSupport {
         return (arg0, arg1, arg2) -> {
             log.error("==========================" + arg0.getMessage() + "=======================", arg0);
             log.error("exception method:" + arg1.getName());
+            System.out.println(Arrays.stream(arg2).map(Object::toString).collect(Collectors.toList()));
         };
     }
 }

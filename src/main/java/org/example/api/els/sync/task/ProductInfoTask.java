@@ -19,7 +19,7 @@ public class ProductInfoTask {
     private ProductInfoMapper productInfoMapper;
     @Autowired
     private RestHighLevelClient restHighLevelClient;
-    @Autowired
+   /* @Autowired*/
     private ProductInfoElasticsearchRepository productInfoElasticsearchRepository;
 
     @SneakyThrows

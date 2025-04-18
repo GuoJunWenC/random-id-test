@@ -1,7 +1,5 @@
 package org.example.api.distributedid;
 
-import org.springframework.stereotype.Component;
-
 import java.net.NetworkInterface;
 import java.util.Enumeration;
 import java.util.Random;

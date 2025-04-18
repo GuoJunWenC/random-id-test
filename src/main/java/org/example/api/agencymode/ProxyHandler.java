@@ -21,6 +21,9 @@ public class ProxyHandler implements InvocationHandler {
         return result;
     }
 
+    public static void main(String[] args) {
+        System.out.println("20244".substring(0,4));
+    }
     private void preRequest() {
         System.out.println("ProxySubject: Preparing for request.");
     }
