@@ -37,6 +37,8 @@ target/
 *.zip
 *.tar
 *.tar.gz
+*.class
+*.jar
 
 ### logs ####
 /logs/
