@@ -19,6 +19,10 @@ public class CglibProxy implements MethodInterceptor {
         System.out.println("CglibProxy: Pre-request processing.");
     }
 
+    private void preRequest2() {
+        System.out.println("CglibProxy: Pre-request processing.");
+    }
+
     private void postRequest() {
         System.out.println("CglibProxy: Post-request processing.");
     }
@@ -31,4 +35,3 @@ public class CglibProxy implements MethodInterceptor {
         return (RealSubject) enhancer.create();
     }
 }
-
