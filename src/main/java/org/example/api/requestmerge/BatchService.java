@@ -19,10 +19,10 @@ public class BatchService {
     private ProductInfoService productInfoService;
 
     @HystrixCollapser(batchMethod = "getProductInfoBatch", scope = com.netflix.hystrix.HystrixCollapser.Scope.GLOBAL,
-            //请求时间间隔在 20ms 之内的请求会被合并为一个请求,默认为 10ms
+            // 请求时间间隔在 20ms 之内的请求会被合并为一个请求,默认为 10ms
             collapserProperties = {
                     @HystrixProperty(name = "timerDelayInMilliseconds", value = "20"),
-                    //设置触发批处理执行之前，在批处理中允许的最大请求数。
+                    // 设置触发批处理执行之前，在批处理中允许的最大请求数。
                     @HystrixProperty(name = "maxRequestsInBatch", value = "200")
             })
     public Future<ProductInfo> getProductInfoById(Long id) {
@@ -31,6 +31,7 @@ public class BatchService {
 
     @HystrixCommand
     public List<ProductInfo> getProductInfoBatch(List<Long> ids) {
+        log.info("批处理,[{}]", ids);
         log.info("批处理,[{}]", ids);
         return productInfoService.listByIds(ids);
     }
