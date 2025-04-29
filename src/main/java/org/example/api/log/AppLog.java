@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Map;
+
 @Data
 public class AppLog implements Serializable {
     private static final long serialVersionUID = 7228578092155793211L;
@@ -17,4 +18,6 @@ public class AppLog implements Serializable {
      * 返回体
      */
     private Object respBody;
+    private StringBuffer aBuffe;
+
 }
