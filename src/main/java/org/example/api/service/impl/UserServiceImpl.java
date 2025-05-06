@@ -14,6 +14,6 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(int id) {
 
         System.out.println("Delete User: " + id);
-        //throw new RuntimeException();
+        // throw new RuntimeException();
     }
 }

@@ -48,20 +48,23 @@ public class BitMapController {
         return stringRedisTemplate.opsForValue().getBit("USER_LOG_IN_KEY", userId);
     }
 
-    public static void main(String[] args) {
-        // 创建Jedis实例
-        Jedis jedis = new Jedis("8.142.153.195");
+    // public static void main(String[] args) {
+    // // 创建Jedis实例
+    // Jedis jedis = new Jedis("8.142.153.195");
 
-        // 执行BITOP指令
-        Long result = jedis.bitop(BitOP.AND, "USER_SIGN_KEY_STATISTICS", "USER_SIGN_KEYS:2023-10-12",
-                "USER_SIGN_KEYS:2023-10-13", "USER_SIGN_KEYS:2023-10-14", "USER_SIGN_KEYS:2023-10-15", "USER_SIGN_KEYS:2023-10-16", "USER_SIGN_KEYS:2023-10-17",
-                "USER_SIGN_KEYS:2023-10-18");
-        System.out.println("Result: " + result);
-        Long user_sign_key_statistics = jedis.bitcount("USER_SIGN_KEY_STATISTICS");
-        System.out.println(user_sign_key_statistics);
-        // 关闭Jedis连接
-        jedis.close();
-    }
+    // // 执行BITOP指令
+    // Long result = jedis.bitop(BitOP.AND, "USER_SIGN_KEY_STATISTICS",
+    // "USER_SIGN_KEYS:2023-10-12",
+    // "USER_SIGN_KEYS:2023-10-13", "USER_SIGN_KEYS:2023-10-14",
+    // "USER_SIGN_KEYS:2023-10-15",
+    // "USER_SIGN_KEYS:2023-10-16", "USER_SIGN_KEYS:2023-10-17",
+    // "USER_SIGN_KEYS:2023-10-18");
+    // System.out.println("Result: " + result);
+    // Long user_sign_key_statistics = jedis.bitcount("USER_SIGN_KEY_STATISTICS");
+    // System.out.println(user_sign_key_statistics);
+    // // 关闭Jedis连接
+    // jedis.close();
+    // }
 
     /**
      * 连续签到用户总数
@@ -72,17 +75,20 @@ public class BitMapController {
     @RequestMapping("/continuousLogIn")
     public Long continuousLogIn(LocalDate startDate, LocalDate endDate) {
         List<LocalDate> allBetweenDate = getAllBetweenDate(startDate, endDate);
-        List<byte[]> bytes = allBetweenDate.stream().map(s -> ("USER_SIGN_KEYS:" + s).getBytes()).collect(Collectors.toList());
-        stringRedisTemplate.execute((RedisCallback<Long>) connection -> connection.bitOp(RedisStringCommands.BitOperation.AND, "collect".getBytes(),
-                bytes.get(0), bytes.get(1), bytes.get(2), bytes.get(3), bytes.get(4), bytes.get(5), bytes.get(6)
-        ));
+        List<byte[]> bytes = allBetweenDate.stream().map(s -> ("USER_SIGN_KEYS:" + s).getBytes())
+                .collect(Collectors.toList());
+        stringRedisTemplate.execute((RedisCallback<Long>) connection -> connection.bitOp(
+                RedisStringCommands.BitOperation.AND, "collect".getBytes(),
+                bytes.get(0), bytes.get(1), bytes.get(2), bytes.get(3), bytes.get(4), bytes.get(5), bytes.get(6)));
 
-        return stringRedisTemplate.execute((RedisCallback<Long>) connection -> connection.bitCount("collect".getBytes()));
+        return stringRedisTemplate
+                .execute((RedisCallback<Long>) connection -> connection.bitCount("collect".getBytes()));
     }
 
     private List<LocalDate> getAllBetweenDate(LocalDate startDate, LocalDate endDate) {
         long numOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate) + 1;
-        return IntStream.iterate(0, i -> i + 1).limit(numOfDaysBetween).mapToObj(startDate::plusDays).collect(Collectors.toList());
+        return IntStream.iterate(0, i -> i + 1).limit(numOfDaysBetween).mapToObj(startDate::plusDays)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -135,7 +141,8 @@ public class BitMapController {
     public Long getFirstSign(Integer userId, LocalDate date) {
         String keySuffix = date.format(DateTimeFormatter.ofPattern(":yyyyMM"));
         String key = "USER_SIGN_KEY:" + userId + keySuffix;
-        Long execute = stringRedisTemplate.execute((RedisCallback<Long>) connection -> connection.bitPos(key.getBytes(), Boolean.TRUE));
+        Long execute = stringRedisTemplate
+                .execute((RedisCallback<Long>) connection -> connection.bitPos(key.getBytes(), Boolean.TRUE));
         if (Objects.nonNull(execute) && execute > -1) {
             return execute + 1;
         }
@@ -149,40 +156,62 @@ public class BitMapController {
      */
     @GetMapping("/signCount")
     public Integer signCount(Integer userId) {
-        //1. 获取日期
+        // 1. 获取日期
         LocalDateTime now = LocalDateTime.now();
-        //2. 拼接key
+        // 2. 拼接key
         String keySuffix = now.format(DateTimeFormatter.ofPattern(":yyyyMM"));
         String key = "USER_SIGN_KEYS:" + userId + keySuffix;
-        //3. 获取今天是本月的第几天
+        // 3. 获取今天是本月的第几天
         int dayOfMonth = now.getDayOfMonth();
-        //4. 获取本月截至今天为止的所有的签到记录，返回的是一个十进制的数字 BITFIELD USER_SIGN_KEYS:100:202310 GET u18 0
+        // 4. 获取本月截至今天为止的所有的签到记录，返回的是一个十进制的数字 BITFIELD USER_SIGN_KEYS:100:202310 GET u18
+        // 0
         List<Long> result = stringRedisTemplate.opsForValue().bitField(
                 key,
                 BitFieldSubCommands.create()
                         .get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0));
-        //没有任务签到结果
+        // 没有任务签到结果
         if (CollectionUtils.isEmpty(result)) {
             return 0;
         }
-        //11 -> 1011
+        // 11 -> 1011
         Long num = result.get(0);
         if (num == null || num == 0) {
             return 0;
         }
-        //5. 循环遍历
+        // 5. 循环遍历
         int count = 0;
         while (true) {
-            //6 让这个数字与1 做与运算，得到数字的最后一个bit位 判断这个数字是否为0
+            // 6 让这个数字与1 做与运算，得到数字的最后一个bit位 判断这个数字是否为0
             if ((num & 1) == 0) {
-                //如果为0，签到结束
+                // 如果为0，签到结束
                 break;
             } else {
                 count++;
             }
-            //右移一位
+            // 右移一位
             num >>>= 1;
         }
         return count;
+    }
+
+    /**
+     * 这段代码演示了无符号右移运算符 >>>= 的使用
+     * 1101L 是一个十进制的Long类型数字
+     * >>>= 1 表示将这个数字无符号右移1位
+     * 1101 的二进制表示为: 10001001101
+     * 右移1位后变成: 01000100110 (十进制为550)
+     * 所以最终输出结果为550
+     * 
+     * 这段代码是为了测试上面signCount方法中使用的位运算逻辑
+     */
+    public static void main(String[] args) {
+        Long num = 1101L;
+        System.out.println(num >>>= 1);
+        // >>= 是带符号右移赋值运算符
+        // 将num右移1位后的结果再赋值给num
+        // 与 >>>= 不同，>>= 会保留符号位
+        // 如果num是正数，结果与 >>>= 相同
+        // 如果num是负数，左边会补1而不是补0
+        System.out.println(num >>= 1);
     }
 }
