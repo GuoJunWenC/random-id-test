@@ -8,4 +8,10 @@ public class HelloServiceImpl1 implements HelloService {
         System.out.println("Hello World from HelloServiceImpl1!");
         System.out.println("Hello World from HelloServiceImpl1!");
     }
+
+    @Override
+    public void sayHelloTest() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'sayHelloTest'");
+    }
 }

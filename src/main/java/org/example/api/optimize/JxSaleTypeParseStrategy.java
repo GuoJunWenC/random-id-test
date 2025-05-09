@@ -12,12 +12,15 @@ public class JxSaleTypeParseStrategy implements SaleTypeParseStrategy {
         return SaleTypeIntEnum.JX.getCode();
     }
 
-    /* @Override
-     public SaleTypeStrEnum support() {
-         return SaleTypeStrEnum.JX;
-     }*/
+    /*
+     * @Override
+     * public SaleTypeStrEnum support() {
+     * return SaleTypeStrEnum.JX;
+     * }
+     */
     @Override
     public boolean support(SaleTypeParseContext saleTypeParseContext) {
+
         return SaleTypeStrEnum.JX.equals(saleTypeParseContext.getSaleTypeStr());
     }
 }

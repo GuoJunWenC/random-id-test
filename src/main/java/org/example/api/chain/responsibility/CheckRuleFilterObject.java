@@ -1,8 +1,5 @@
 package org.example.api.chain.responsibility;
 
-/**
- * 规则拦截对象
- */
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
 import org.springframework.core.annotation.Order;

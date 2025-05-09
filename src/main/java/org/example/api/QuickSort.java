@@ -2,7 +2,7 @@ package org.example.api;
 
 public class QuickSort {
     public static void main(String[] args) {
-        int[] arr = {29, 10, 14, 37, 13}; // 待排序数组
+        int[] arr = { 80, 10, 14, 37, 13 }; // 待排序数组
         quickSort(arr, 0, arr.length - 1); // 调用快速排序函数
         for (int num : arr) {
             System.out.print(num + " ");

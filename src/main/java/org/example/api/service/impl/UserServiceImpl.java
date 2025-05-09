@@ -16,4 +16,11 @@ public class UserServiceImpl implements UserService {
         System.out.println("Delete User: " + id);
         // throw new RuntimeException();
     }
+
+    @Override
+    public void updateUser(User user) {
+        // TODO Auto-generated method stub
+        user.setName("John");
+        throw new UnsupportedOperationException("Unimplemented method 'updateUser'");
+    }
 }
